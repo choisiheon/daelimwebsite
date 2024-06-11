@@ -2,11 +2,11 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-function Login() {
-    const [id, setId] = useState('');
+function LoginForm(props) {
+    const {styleData,setIsLoggedIn,setName} = props;
+    const [id, setId] = useState(''); //구조분해할당
     const [pwd, setPwd] = useState('');
-    const [name, setName] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    
 
     const onClickBtn = async () => {
         if (!validateCheck()) return;
@@ -17,6 +17,8 @@ function Login() {
             localStorage.setItem('jwt', token);
             setIsLoggedIn(true);
             setName(userName);
+            setId('');
+            setPwd('');
             alert('로그인 성공! 토큰이 저장되었습니다.');
         } 
         catch (error) {
@@ -29,16 +31,6 @@ function Login() {
             }
         }
     };
-    
-
-    const logOutBtn = async() => {
-        localStorage.removeItem('jwt');
-        setIsLoggedIn(false);
-        setName('');
-        setId('');
-        setPwd('');
-        alert('로그아웃 되었습니다.');
-    }
 
     const validateCheck = () => {
         if (!id || !pwd) {
@@ -52,16 +44,8 @@ function Login() {
         return true;
     };
     
-
     return (
-      <div>
-        {isLoggedIn ? (
-          <div>
-            <h2>{name}님.환영합니다.</h2>
-            <button onClick={logOutBtn}>로그아웃</button>
-          </div>
-        ) : (
-          <div>
+        <div style={styleData}>
             <h2>Login</h2>
             <input
               type="text"
@@ -76,10 +60,8 @@ function Login() {
               onChange={(e) => setPwd(e.target.value)}
             />
             <button onClick={onClickBtn}>로그인 하기</button>
-          </div>
-        )}     
-      </div>
+        </div>
     );
 }
   
-export default Login;
+export default LoginForm;
